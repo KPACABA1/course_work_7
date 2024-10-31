@@ -1,7 +1,9 @@
 import os
+from datetime import timedelta
 from pathlib import Path
 
 from dotenv import load_dotenv
+load_dotenv()
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -29,6 +31,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'habits',
     'users',
+    'rest_framework_simplejwt',
 ]
 
 MIDDLEWARE = [
@@ -108,3 +111,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Настройки для работы с пользователями
 AUTH_USER_MODEL = 'users.User'
+
+REST_FRAMEWORK = {
+    # Настройка для авторизации с помощью JWT токена
+    'DEFAULT_AUTHENTICATION_CLASSES': ('rest_framework_simplejwt.authentication.JWTAuthentication',),
+}
+
+# Настройка жизни ACCESS и REFRESH токенов
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=10),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1)
+}

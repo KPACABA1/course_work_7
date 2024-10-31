@@ -1,3 +1,9 @@
 from django.contrib import admin
 
-# Register your models here.
+from habits.models import UsefulHabit
+
+
+@admin.register(UsefulHabit)
+class UsefulHabitAdmin(admin.ModelAdmin):
+    """Админка для полезных привычек."""
+    list_display = ('id', 'title')
