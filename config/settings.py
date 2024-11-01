@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'habits',
     'users',
     'rest_framework_simplejwt',
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [
