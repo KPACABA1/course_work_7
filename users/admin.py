@@ -5,5 +5,5 @@ from users.models import User
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    """Админка для полезных привычек."""
+    """Админка для пользователей."""
     list_display = ('id', 'email')

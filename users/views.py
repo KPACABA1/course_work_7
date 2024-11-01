@@ -1,8 +1,7 @@
-from rest_framework.generics import CreateAPIView, RetrieveAPIView
+from rest_framework.generics import CreateAPIView
 
 from users.models import User
-from users.serializers import UserCreateSerializer, UserSerializer
-
+from users.serializers import UserCreateSerializer
 
 class UserCreateAPIView(CreateAPIView):
     """Класс для создания моделей пользователей."""
@@ -17,9 +16,3 @@ class UserCreateAPIView(CreateAPIView):
         # Хэширую пароль пользователя и сохраняю пользователя
         user.set_password(user.password)
         user.save()
-
-
-class UserRetrieveAPIView(RetrieveAPIView):
-    """Класс для просмотра детальной информации об отдельном пользователе."""
-    queryset = User.objects.all()
-    serializer_class = UserSerializer

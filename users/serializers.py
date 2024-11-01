@@ -1,5 +1,5 @@
 from rest_framework.serializers import ModelSerializer
-
+from habits.serializers import UsefulHabitSerializer
 from users.models import User
 
 
@@ -8,10 +8,3 @@ class UserCreateSerializer(ModelSerializer):
     class Meta:
         model = User
         fields = ('email', 'tg_nick', 'password')
-
-
-class UserSerializer(ModelSerializer):
-    """Сериализатор для моделей пользователей, кроме создания."""
-    class Meta:
-        model = User
-        fields = ('id', 'email', 'tg_nick')
