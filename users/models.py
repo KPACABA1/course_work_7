@@ -6,7 +6,7 @@ class User(AbstractUser):
     username = None
 
     email = models.EmailField(verbose_name='Почта', unique=True)
-    tg_nick = models.CharField(max_length=50, blank=True, null=True, verbose_name='Телеграмм ник')
+    tg_chat_id = models.CharField(max_length=50, unique=True, verbose_name='Телеграмм chat_id', default='нет_телеграмма')
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []

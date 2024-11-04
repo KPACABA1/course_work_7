@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'drf_yasg',
     'corsheaders',
+    'django_celery_beat',
 ]
 
 MIDDLEWARE = [
@@ -100,7 +101,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'ru-ru'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Yekaterinburg'
 
 USE_I18N = True
 
@@ -132,7 +133,24 @@ CORS_ALLOWED_ORIGINS = [
     "https://read-only.example.com",
     "https://read-and-write.example.com",
 ]
-
 CSRF_TRUSTED_ORIGINS = [
     "https://read-and-write.example.com",
 ]
+
+# Настройки для Celery
+CELERY_TIMEZONE = TIME_ZONE
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+
+# Настройка для Celery-beat
+CELERY_BEAT_SCHEDULER='django_celery_beat.schedulers:DatabaseScheduler'
+
+# настройка для создания своей периодической задачи
+CELERY_BEAT_SCHEDULE = {
+    'send_notification_tg_about_useful_habit': {
+        'task': 'habits.tasks.send_notification_tg_about_useful_habit',
+        'schedule': timedelta(seconds=10),
+    },
+}

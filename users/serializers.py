@@ -7,4 +7,4 @@ class UserCreateSerializer(ModelSerializer):
     """Сериализатор для создания моделей пользователей."""
     class Meta:
         model = User
-        fields = ('email', 'tg_nick', 'password')
+        fields = ('email', 'tg_chat_id', 'password')
