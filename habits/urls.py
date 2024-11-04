@@ -13,8 +13,4 @@ urlpatterns = [
     path('<int:pk>/update/', UsefulHabitUpdateAPIView.as_view(), name='useful_habit-update'),
     path('<int:pk>/destroy/', UsefulHabitDestroyAPIView.as_view(), name='useful_habit-destroy'),
     path('my_list/', UsefulHabitUserListAPIView.as_view(), name='my_useful_habit-list'),
-
-
-
-    # path('test/', UserHabitViewSet.as_view(), name='Useful_habit-list'),
 ]

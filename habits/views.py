@@ -8,7 +8,7 @@ from users.permissions import IsOwner
 
 class UsefulHabitPublicListAPIView(ListAPIView):
     """Класс для вывода моделей публичных полезных привычек."""
-    queryset = UsefulHabit.objects.all()
+    queryset = UsefulHabit.objects.filter(sign_publicity='public')
     serializer_class = UsefulHabitSerializer
 
 
