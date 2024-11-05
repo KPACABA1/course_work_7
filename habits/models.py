@@ -28,6 +28,8 @@ class UsefulHabit(models.Model):
                              blank=True)
     sign_publicity = models.CharField(max_length=50, verbose_name='Публичная полезная привычка или нет?',
                                       choices=(('public', 'Публичная'), ('non-public', 'Непубличная')))
+    time_to_complete = models.PositiveIntegerField(verbose_name='Время на выполнение в секундах',
+                                                   default=120)
     class Meta:
         verbose_name = 'Полезная привычка'
         verbose_name_plural = 'Полезные привычки'
