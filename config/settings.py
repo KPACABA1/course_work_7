@@ -151,6 +151,9 @@ CELERY_BEAT_SCHEDULER='django_celery_beat.schedulers:DatabaseScheduler'
 CELERY_BEAT_SCHEDULE = {
     'send_notification_tg_about_useful_habit': {
         'task': 'habits.tasks.send_notification_tg_about_useful_habit',
-        'schedule': timedelta(days=1),
+        'schedule': timedelta(seconds=10),
     },
 }
+
+# Токен от телеграмм бота
+tg_token = os.getenv('tg_token')
