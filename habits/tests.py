@@ -2,7 +2,7 @@ from django.urls import reverse
 from rest_framework.test import APITestCase
 from rest_framework import status
 
-from habits.models import UsefulHabit
+from habits.models import UsefulHabit, PleasantHabit
 from users.models import User
 
 
@@ -11,13 +11,15 @@ class UsefulHabitTestCase(APITestCase):
     # Создал необходимые модели и авторизовал пользователя
     def setUp(self):
         self.user = User.objects.create(email='test_email@yandex.ru')
+        self.pleasant_habit = PleasantHabit.objects.create(title='text_title', creator=self.user)
         self.useful_habit_public = UsefulHabit.objects.create(title='text_title', place='test_place', time='06:00:00',
                                                               day_of_week=0, action='test_action', creator=self.user,
-                                                              pleasant_habit='test_pleasant_habit', sign_publicity='public')
+                                                              pleasant_habit=self.pleasant_habit, sign_publicity=True,
+                                                              time_to_complete=120)
         self.useful_habit_non_public = UsefulHabit.objects.create(title='text_title_01', place='test_place_01',
                                                                   time='06:00:00', day_of_week=0, action='test_action_01',
-                                                                  creator=self.user, pleasant_habit='test_pleasant_habit',
-                                                                  sign_publicity='non-public')
+                                                                  creator=self.user, pleasant_habit=self.pleasant_habit,
+                                                                  sign_publicity=False, time_to_complete=120)
         self.client.force_authenticate(user=self.user)
 
 
@@ -28,7 +30,8 @@ class UsefulHabitTestCase(APITestCase):
 
         # Act(совершаю действие которое тестирую)
         data = {'title': 'text_title_0', 'place': 'test_place_0', 'time': '07:00:00', 'action': 'test_action_0',
-                'creator': self.user.pk, 'pleasant_habit': 'test_pleasant_habit_0', 'sign_publicity': 'public'}
+                'creator': self.user.pk, 'pleasant_habit': self.pleasant_habit.pk, 'sign_publicity': True,
+                'time_to_complete': 120}
         response = self.client.post(url, data)
 
         # Assert(делаю проверки)
@@ -91,15 +94,16 @@ class UsefulHabitTestCase(APITestCase):
         result = [
             {
                 "id": self.useful_habit_public.pk,
+                "time_to_complete": str(self.useful_habit_public.time_to_complete),
                 "title": self.useful_habit_public.title,
                 "place": self.useful_habit_public.place,
                 "time": self.useful_habit_public.time,
                 "day_of_week": self.useful_habit_public.day_of_week,
                 "action": self.useful_habit_public.action,
-                "pleasant_habit": self.useful_habit_public.pleasant_habit,
                 "award": None,
                 "sign_publicity": self.useful_habit_public.sign_publicity,
-                "creator": self.useful_habit_public.creator.pk
+                "creator": self.useful_habit_public.creator.pk,
+                "pleasant_habit": self.useful_habit_public.pleasant_habit.pk
             }
         ]
         data = response.json()
@@ -127,31 +131,60 @@ class UsefulHabitTestCase(APITestCase):
             "results": [
                 {
                     "id": self.useful_habit_public.pk,
+                    "time_to_complete": str(self.useful_habit_public.time_to_complete),
                     "title": self.useful_habit_public.title,
                     "place": self.useful_habit_public.place,
                     "time": self.useful_habit_public.time,
                     "day_of_week": self.useful_habit_public.day_of_week,
                     "action": self.useful_habit_public.action,
-                    "pleasant_habit": self.useful_habit_public.pleasant_habit,
                     "award": None,
                     "sign_publicity": self.useful_habit_public.sign_publicity,
-                    "creator": self.useful_habit_public.creator.pk
+                    "creator": self.useful_habit_public.creator.pk,
+                    "pleasant_habit": self.useful_habit_public.pleasant_habit.pk
                 },
                 {
                     "id": self.useful_habit_non_public.pk,
+                    "time_to_complete": str(self.useful_habit_non_public.time_to_complete),
                     "title": self.useful_habit_non_public.title,
                     "place": self.useful_habit_non_public.place,
                     "time": self.useful_habit_non_public.time,
                     "day_of_week": self.useful_habit_non_public.day_of_week,
                     "action": self.useful_habit_non_public.action,
-                    "pleasant_habit": self.useful_habit_non_public.pleasant_habit,
                     "award": None,
                     "sign_publicity": self.useful_habit_non_public.sign_publicity,
-                    "creator": self.useful_habit_non_public.creator.pk
+                    "creator": self.useful_habit_non_public.creator.pk,
+                    "pleasant_habit": self.useful_habit_non_public.pleasant_habit.pk
                 }
             ]
         }
         data = response.json()
         self.assertEqual(
             data, result
+        )
+
+
+class PleasantHabitTestCase(APITestCase):
+    """Тесты для приятных привычек"""
+    # Создал необходимые модели и авторизовал пользователя
+    def setUp(self):
+        self.user = User.objects.create(email='test_email@yandex.ru')
+        self.pleasant_habit = PleasantHabit.objects.create(title='text_title', creator=self.user)
+        self.client.force_authenticate(user=self.user)
+
+
+    def test_pleasant_habit_create(self):
+        """Тест на создание приятной привычки."""
+        # Arrange(подготавливаю данные для теста)
+        url = reverse('habits:pleasant_habit-create')
+
+        # Act(совершаю действие которое тестирую)
+        data = {'title': 'speed_test', 'creator': self.user.pk}
+        response = self.client.post(url, data)
+
+        # Assert(делаю проверки)
+        self.assertEqual(
+            response.status_code, status.HTTP_201_CREATED
+        )
+        self.assertEqual(
+            PleasantHabit.objects.all().count(), 2
         )

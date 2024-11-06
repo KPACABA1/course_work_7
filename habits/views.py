@@ -1,21 +1,21 @@
 from rest_framework.generics import ListAPIView, CreateAPIView, UpdateAPIView, DestroyAPIView
 
-from habits.models import UsefulHabit
+from habits.models import UsefulHabit, PleasantHabit
 from habits.paginations import UserRetrievePagination
-from habits.serializers import UsefulHabitSerializer
+from habits.serializers import UsefulHabitSerializer, PleasantHabitSerializer, UsefulHabitCreateSerializer
 from users.permissions import IsOwner
 
 
 class UsefulHabitPublicListAPIView(ListAPIView):
     """Класс для вывода моделей публичных полезных привычек."""
-    queryset = UsefulHabit.objects.filter(sign_publicity='public')
+    queryset = UsefulHabit.objects.filter(sign_publicity=True)
     serializer_class = UsefulHabitSerializer
 
 
 class UsefulHabitCreateAPIView(CreateAPIView):
     """Класс для создания полезных привычек."""
     queryset = UsefulHabit.objects.all()
-    serializer_class = UsefulHabitSerializer
+    serializer_class = UsefulHabitCreateSerializer
 
     def perform_create(self, serializer):
         """Метод для автоматической привязки создающего пользователя к полезной привычке."""
@@ -47,3 +47,15 @@ class UsefulHabitUserListAPIView(ListAPIView):
         """Метод для фильтра полезных привычек по текущему пользователю."""
         queryset = UsefulHabit.objects.filter(creator=self.request.user)
         return queryset
+
+
+class PleasantHabitCreateAPIView(CreateAPIView):
+    """Класс для создания приятных привычек."""
+    queryset = PleasantHabit.objects.all()
+    serializer_class = PleasantHabitSerializer
+
+    def perform_create(self, serializer):
+        """Метод для автоматической привязки создающего пользователя к приятной привычке."""
+        pleasant_habit = serializer.save()
+        pleasant_habit.creator = self.request.user
+        pleasant_habit.save()
