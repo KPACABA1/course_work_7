@@ -21,8 +21,9 @@ def send_notification_tg_about_useful_habit():
     useful_habit_today = UsefulHabit.objects.filter(Q(day_of_week=today) | Q(day_of_week=None))
     # Отправляю по каждой привычке сообщения
     for info in useful_habit_today:
-        params = {
-            'text': f'Здравствуйте, сегодня вы планировали {info.action} в {info.time} в {info.place}',
-            'chat_id': info.creator.tg_chat_id
-        }
-        requests.get(f'https://api.telegram.org/bot{os.getenv('tg_token')}/sendMessage', params=params)
+        if info.creator.tg_chat_id:
+            params = {
+                'text': f'Здравствуйте, сегодня вы планировали {info.action} в {info.time} в {info.place}',
+                'chat_id': info.creator.tg_chat_id
+            }
+            requests.get(f'https://api.telegram.org/bot{os.getenv('tg_token')}/sendMessage', params=params)
