@@ -22,7 +22,6 @@ class UsefulHabitTestCase(APITestCase):
                                                                   sign_publicity=False, time_to_complete=120)
         self.client.force_authenticate(user=self.user)
 
-
     def test_useful_habit_create(self):
         """Тест на создание полезной привычки."""
         # Arrange(подготавливаю данные для теста)
@@ -42,7 +41,6 @@ class UsefulHabitTestCase(APITestCase):
             UsefulHabit.objects.all().count(), 3
         )
 
-
     def test_useful_habit_update(self):
         """Тест на обновление полезной привычки."""
         # Arrange(подготавливаю данные для теста)
@@ -61,7 +59,6 @@ class UsefulHabitTestCase(APITestCase):
             data.get('title'), 'test_new'
         )
 
-
     def test_useful_habit_delete(self):
         """Тест на удаление полезной привычки."""
         # Arrange(подготавливаю данные для теста)
@@ -77,7 +74,6 @@ class UsefulHabitTestCase(APITestCase):
         self.assertEqual(
             UsefulHabit.objects.all().count(), 1
         )
-
 
     def test_useful_habit_public_list(self):
         """Тест на просмотр списка публичных полезных привычек."""
@@ -110,7 +106,6 @@ class UsefulHabitTestCase(APITestCase):
         self.assertEqual(
             data, result
         )
-
 
     def test_my_useful_habit_list(self):
         """Тест на просмотр списка полезных привычек конкретного пользователя."""
@@ -170,7 +165,6 @@ class PleasantHabitTestCase(APITestCase):
         self.user = User.objects.create(email='test_email@yandex.ru')
         self.pleasant_habit = PleasantHabit.objects.create(title='text_title', creator=self.user)
         self.client.force_authenticate(user=self.user)
-
 
     def test_pleasant_habit_create(self):
         """Тест на создание приятной привычки."""

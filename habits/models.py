@@ -27,6 +27,7 @@ class PleasantHabit(models.Model):
     def __str__(self):
         return f'{self.title}'
 
+
 class UsefulHabit(models.Model):
     """Модель полезной привычки."""
     title = models.CharField(max_length=35, verbose_name='название полезной привычки')

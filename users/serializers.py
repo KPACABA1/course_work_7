@@ -1,5 +1,4 @@
 from rest_framework.serializers import ModelSerializer
-from habits.serializers import UsefulHabitSerializer
 from users.models import User
 
 
