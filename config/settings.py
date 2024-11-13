@@ -69,10 +69,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -108,9 +104,6 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = 'static/'
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -157,3 +150,8 @@ CELERY_BEAT_SCHEDULE = {
 
 # Токен от телеграмм бота
 tg_token = os.getenv('tg_token')
+
+# Настройка для статики на удаленном сервере
+remote_server = os.getenv('remote_server', False) == 'True'
+if remote_server:
+    STATIC_ROOT = BASE_DIR / 'static'
